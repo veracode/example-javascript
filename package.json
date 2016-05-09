@@ -5,6 +5,7 @@
   "author": "srcclr <hello@srcclr.com>",
   "description": "A node project to demostrate srcclr scans",
   "dependencies": {
-    "jquery": "3.0.0-alpha1"
+    "jquery": "3.0.0-alpha1",
+    "express": "4.1.1"
   }
 }
