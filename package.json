@@ -1,0 +1,10 @@
+{
+  "name": "example-javascript",
+  "version": "0.0.1",
+  "private": true,
+  "author": "srcclr <hello@srcclr.com>",
+  "description": "A node project to demostrate srcclr scans",
+  "dependencies": {
+    "jquery": "3.0.0-alpha1"
+  }
+}
