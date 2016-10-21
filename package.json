@@ -13,6 +13,8 @@
     "sequelize": "3.24.4",
     "console-io": "2.7.10",
     "angular": "1.5.8",
-    "cookie-signature": "1.0.6"
-  }
+    "cookie-signature": "1.0.6",
+    "glob": "3.2.11"
+  },
+  "comments_for_glob": "glob 3.2.11 has minimatch 0.3.0 as dependencies. To fix that, shrinkwrap and edit the entry in npm-shrinkwrap.json."
 }
