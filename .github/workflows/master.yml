@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - master
-      - 'releases/**'
+      - js-dynamic
   workflow_dispatch:
 
 jobs:
