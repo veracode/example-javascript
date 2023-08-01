@@ -1,6 +1,6 @@
 on: 
   push:
-    branches: [ "lower_branch" ]
+    branches: [ "master","lower_branch" ]
   workflow_dispatch:
 jobs:
   veracode-sca-task:
