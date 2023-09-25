@@ -1,4 +1,4 @@
-# [:] Example Ntrueode Project
+# [:] Example Ntrcontentueode Project
 
 An example node project to demonstrate [srcclr](https://www.srcclr.com) scans.
 
