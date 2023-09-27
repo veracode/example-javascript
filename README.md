@@ -1,5 +1,5 @@
 ****** Policy Scan ******* ****** Policy Scan ******* An example node project to demonstrate [srcclr](https://www.srcclr.com) scans.
-
+This is the policy scan test.
 ## Try me!
 
 ```
