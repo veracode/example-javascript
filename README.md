@@ -2,7 +2,7 @@
 This is the policy scan test.
 ## Try me!
 
-```****** Policy Scan ******* 
+```****** Policy Scan ******* ****** Policy Scan ******* 
 brew tap srcclr/srcclr..
 brew install srcclr
 srcclr activate
