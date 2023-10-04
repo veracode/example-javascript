@@ -11,3 +11,6 @@ srcclr scan --url https://github.com/srcclr/example-javascript
 .............
 This is Policy scan test..........thtt....
 ..
+
+
+This is a new line added via Cypress.
