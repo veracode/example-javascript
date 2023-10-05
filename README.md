@@ -10,3 +10,5 @@ srcclr scan --url https://github.com/srcclr/example-javascript
 This is a new line added via Cypress.
 
 This is a new line added via Cypress.
+
+This is a new line added via Cypress.
