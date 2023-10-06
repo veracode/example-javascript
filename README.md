@@ -1,4 +1,4 @@
- ## Try me!
+****** Policy Scan *******  ## Try me!
 brew tap srcclr/srcclr..
 brew install srcclr
 srcclr activate
