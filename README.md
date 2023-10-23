@@ -1,2 +1,1 @@
-Updated README Content...
-Added the content.
+Updated README Content
