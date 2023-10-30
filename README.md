@@ -11,5 +11,5 @@ srcclr activate
 srcclr scan --url https://github.com/srcclr/example-javascript
 ```
 s
-developss
+developsss
 test2
