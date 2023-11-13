@@ -5,14 +5,18 @@
   "author": "srcclr <hello@srcclr.com>",
   "description": "A node project to demostrate srcclr scans",
   "dependencies": {
-    "jquery": "3.0.0-alpha1",
-    "express": "4.1.1",
-    "boom": "0.2.1",
-    "tinymce": "4.2.3",
-    "hapi": "8.1.0",
-    "sequelize": "3.12.1",
-    "console-io": "2.6.3",
     "angular": "1.3.19",
-    "cookie-signature": "1.0.2"
+    "boom": "0.2.1",
+    "console-io": "2.6.3",
+    "cookie-signature": "1.0.2",
+    "express": "4.1.1",
+    "hapi": "8.1.0",
+    "jquery": "3.0.0-alpha1",
+    "mocha": "^6.2.2",
+    "sequelize": "3.12.1",
+    "tinymce": "4.2.3"
+  },
+  "scripts": {
+    "test": "mocha tests/spec.js"
   }
 }
