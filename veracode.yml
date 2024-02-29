@@ -2,3 +2,9 @@ veracode_static_scan:
   push:
     trigger: true
   compile_locally: true
+veracode_sca_scan:   
+  push:
+    trigger: true
+veracode_iac_secrets_scan:
+  push:
+    trigger: true
