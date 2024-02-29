@@ -1,10 +1,10 @@
 veracode_static_scan:
   push:
-    trigger: true
+    trigger: false
   compile_locally: true
 veracode_sca_scan:   
   push:
-    trigger: true
+    trigger: false
 veracode_iac_secrets_scan:
   push:
-    trigger: true
+    trigger: false
