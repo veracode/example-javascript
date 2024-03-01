@@ -1,7 +1,6 @@
 veracode_static_scan:
   push:
     trigger: true
-  compile_locally: true
 veracode_sca_scan:   
   push:
     trigger: true
