@@ -2,7 +2,7 @@ veracode_static_scan:
   push:
     trigger: true
   compile_locally: true
-  branches_to_run:
+  branches_to_exclude:
       - 'example-javascript'
 veracode_sca_scan:   
   push:
