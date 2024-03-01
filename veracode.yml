@@ -2,6 +2,9 @@ veracode_static_scan:
   push:
     trigger: true
   compile_locally: true
+  branches_to_run:
+      - 'example-javascript'
+      - 'vulnado'
 veracode_sca_scan:   
   push:
     trigger: true
