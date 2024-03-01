@@ -2,8 +2,8 @@ veracode_static_scan:
   push:
     trigger: true
   compile_locally: true
-  branches_to_exclude:
-      - 'vulnado'
+  branches_to_run:
+      - 'example-javascript'
 veracode_sca_scan:   
   push:
     trigger: true
