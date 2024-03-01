@@ -2,9 +2,4 @@ veracode_static_scan:
   push:
     trigger: true
   compile_locally: true
-veracode_sca_scan:   
-  push:
-    trigger: false
-veracode_iac_secrets_scan:
-  push:
-    trigger: false
+ local_compilation_workflow: veracode-build
