@@ -1,4 +1,3 @@
 veracode_static_scan:
   compile_locally: false
-  local_compilation_workflow: veracode-build
   policy: 'Veracode Recommended Medium + SA'
