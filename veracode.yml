@@ -1,2 +1,2 @@
 veracode_static_scan:
- compile_locally: true
+ compile_locally: false
