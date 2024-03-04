@@ -1,1 +1,4 @@
-
+veracode_static_scan:
+  push:
+    trigger: true
+ local_compilation_workflow: true
