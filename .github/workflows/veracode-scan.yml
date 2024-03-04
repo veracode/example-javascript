@@ -1,4 +1,4 @@
-name: Veracode Software Composition Analysis
+name: veracode-build
 
 run-name: Software Composition Analysis - ${{ github.event.client_payload.repository.name }}
 
