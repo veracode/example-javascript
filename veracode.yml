@@ -1,2 +1,16 @@
 veracode_static_scan:
- compile_locally: false
+ compile_locally: true
+  pull_request:
+    trigger: true
+    action:
+      - opened
+      - synchronize
+      - closed 
+      - reopened
+    target_branch:
+      - default_branch 
+  # What branch would you like to use for platform analysis 
+  # By selecting a branch here - Veracode will save your last scan result
+  # As an App Profile - given the current name of your scanned repo
+  # Use 'none' if you would not like any scans saved to the platform
+  analysis_branch: master
