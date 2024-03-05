@@ -2,3 +2,5 @@ veracode_static_scan:
   compile_locally: true
   policy: 'Veracode Recommended + SCA'
   analysis_branch: default_branch
+  push:
+    trigger: true
