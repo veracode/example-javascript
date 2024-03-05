@@ -1,3 +1,4 @@
 veracode_static_scan:
   compile_locally: true
   policy: 'Veracode Recommended + SA'
+  analysis_branch: default_branch
