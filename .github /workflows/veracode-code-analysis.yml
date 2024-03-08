@@ -17,7 +17,8 @@ on:
             java-maven-policy-scan, 
             java-gradle-policy-scan, 
             source-code-policy-scan, 
-            go-policy-scan]
+            go-policy-scan,
+            my_workflow]
 
 jobs:
   register:
