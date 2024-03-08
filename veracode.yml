@@ -1,4 +1,4 @@
 veracode_static_scan:
   push:
     trigger: true
- use_custom_workflow: my_workflow
+ use_custom_workflow: veracode-build
