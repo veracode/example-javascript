@@ -1,5 +1,4 @@
 veracode_static_scan:
-  use_custom_workflow: true
-  policy: 'Veracode Recommended Medium + SCA'
   push:
     trigger: true
+  use_custom_workflow: true
