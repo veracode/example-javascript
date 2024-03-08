@@ -1,6 +1,5 @@
 veracode_static_scan:
-  compile_locally: true
-  use_custom_workflow: build-file
+  use_custom_workflow: true
   policy: 'Veracode Recommended Medium + SCA'
   analysis_branch: default_branch
   push:
