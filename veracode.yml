@@ -1,4 +1,4 @@
 veracode_static_scan:
   push:
     trigger: true
-  compile_locally: true
+ use_custom_workflow: true
