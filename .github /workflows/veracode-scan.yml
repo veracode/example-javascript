@@ -1,14 +1,9 @@
-name: Veracode Software Composition Analysis
+name: Veracode SAST and SCA Scan - From source repo
 
-run-name: Software Composition Analysis - ${{ github.event.client_payload.repository.name }}
-
-concurrency:
-  group: ${{ github.event.client_payload.event_type }}-${{ github.event.client_payload.repository.name }}-${{ github.event.client_payload.repository.branch }}
-  cancel-in-progress: true
 on:
-  repository_dispatch:
-    types: [veracode-build]
-    
+    repository_dispatch:
+      types: [veracode-build]
+
 jobs:
   register:
     uses: ./.github/workflows/veracode-check-run.yml
@@ -20,24 +15,47 @@ jobs:
       event_type: ${{ github.event.client_payload.event_type }}
       github_token: ${{ github.event.client_payload.token }}
       run_id: ${{ github.run_id }}
-       
-  veracode-sca-scan:
-    needs: [register]
+
+  build:
     runs-on: ubuntu-latest
-    name: Veracode Component Analysis
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+
+      - name: Prepare the SAST scan artifact
+        run: zip -r veracode.zip . -x .git/**\* test/**\* .github/**\* .gitignore .gitattributes
+
+      - uses: actions/upload-artifact@v3
         with:
-          repository: ${{ github.event.client_payload.repository.full_name }}
-          ref: ${{ github.event.client_payload.sha }}
-          token: ${{ github.event.client_payload.token }}
-      - name: Run Veracode SCA
-        env:
-          SRCCLR_API_TOKEN: ${{ secrets.VERACODE_AGENT_TOKEN }}
-        uses: veracode/veracode-sca@v2.1.9
+          name: veracode-artifact
+          path: veracode.zip
+
+  veracode_policy_scan:
+    needs: build
+    runs-on: ubuntu-latest
+    name: Veracode Static Code Analysis
+    steps:
+      - name: get archive
+        uses: actions/download-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          create-issues: false  
-#           fail-on-cvss: 1
-#           min-cvss-for-issue: 1
+          name: veracode-artifact
+          path: ./veracode_artifact_directory
+
+      - name: Get the name of the downloaded files
+        run: |
+          artifact_file=$(ls -1 ./veracode_artifact_directory | head -n 1)
+          echo "veracode_artifact=$artifact_file" >> $GITHUB_ENV
+
+      - name: Veracode Upload And Scan
+        uses: veracode/uploadandscan-action@main
+        with:
+          appname: 'Veracode GitHub App'
+          createprofile: true
+          version: '${{ github.run_id }}'
+          veracode_policy_name: 'Veracode Recommended High + SCA Random policy name'
+          filepath: ./veracode_artifact_directory/${{ env.veracode_artifact }}
+          vid: '${{ secrets.VERACODE_API_ID }}'
+          vkey: '${{ secrets.VERACODE_API_KEY }}'
+          scanpollinginterval: 30
+          scantimeout: 15
