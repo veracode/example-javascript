@@ -1,0 +1,49 @@
+name: Binary Ready - Veracode Static Code Analysis
+
+run-name: Binary Ready - Static Code Analysis - ${{ github.event.client_payload.repository.name }}
+
+on:
+  repository_dispatch:
+    types: [binary-ready-veracode-sast-policy-scan]
+
+jobs:
+  register:
+    uses: ./.github/workflows/veracode-check-run.yml
+    with:
+      check_run_name: ${{ github.workflow }}
+      head_sha: ${{ github.event.client_payload.sha }}
+      repositroy_owner: ${{ github.event.client_payload.repository.owner }}
+      repositroy_name: ${{ github.event.client_payload.repository.name }}
+      event_type: ${{ github.event.client_payload.event_type }}
+      github_token: ${{ github.event.client_payload.token }}
+      run_id: ${{ github.run_id }}
+
+  policy_scan:
+    needs: register
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ github.event.client_payload.token }}
+          run_id: ${{ github.event.client_payload.run_id }}
+          repo: ${{ github.event.client_payload.repository.full_name }}
+      - name: Get the name of the downloaded files
+        run: |
+          artifact_file=$(ls -1 ./veracode-artifact | head -n 1)
+          echo "veracode_artifact=$artifact_file" >> $GITHUB_ENV
+      - name: Veracode Upload and Scan Action Step
+        uses: veracode/uploadandscan-action@main
+        id: upload_and_scan
+        with:
+          vid: '${{ secrets.VERACODE_API_ID }}'
+          vkey: '${{ secrets.VERACODE_API_KEY }}'
+          appname: ${{ github.event.client_payload.user_config.profile_name }}
+          createprofile: true
+          version: '${{ github.run_id }}'
+          filepath: ./veracode-artifact/${{ env.veracode_artifact }}
+          include: ${{ github.event.client_payload.modules_to_scan }}
+          policy: VeraDemo Policy
+          scantimeout: 15
+          failbuild: true
