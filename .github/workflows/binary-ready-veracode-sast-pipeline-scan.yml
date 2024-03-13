@@ -1,0 +1,43 @@
+name: Binary Ready - Veracode Static Code Analysis
+
+run-name: Binary Ready - Static Code Analysis - ${{ github.event.client_payload.repository.name }}
+
+on:
+  repository_dispatch:
+    types: [binary-ready-veracode-sast-pipeline-scan]
+
+jobs:
+  register:
+    uses: ./.github/workflows/veracode-check-run.yml
+    with:
+      check_run_name: ${{ github.workflow }}
+      head_sha: ${{ github.event.client_payload.sha }}
+      repositroy_owner: ${{ github.event.client_payload.repository.owner }}
+      repositroy_name: ${{ github.event.client_payload.repository.name }}
+      event_type: ${{ github.event.client_payload.event_type }}
+      github_token: ${{ github.event.client_payload.token }}
+      run_id: ${{ github.run_id }}
+        
+  pipeline_scan:
+    needs: register
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download artifact
+      id: download-artifact
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        github_token: ${{secrets.GITHUB_TOKEN}}
+        run_id: ${{ github.event.client_payload.run_id }}
+        repo: ${{ github.event.client_payload.repository.full_name }}
+    - name: Get the name of the downloaded files
+      run: |
+        artifact_file=$(ls -1 ./veracode-artifact | head -n 1)
+        echo "veracode_artifact=$artifact_file" >> $GITHUB_ENV
+    - name: Veracode Pipeline-Scan
+      id: pipeline-scan
+      uses: veracode/Veracode-pipeline-scan-action@v1.0.8
+      with:
+        vid: ${{ secrets.VERACODE_API_ID }}
+        vkey: ${{ secrets.VERACODE_API_KEY }}
+        file: ./veracode-artifact/${{ env.veracode_artifact }}
+        fail_build: true
