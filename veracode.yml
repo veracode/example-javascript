@@ -1,6 +1,1 @@
-veracode_static_scan:
-  # Please only specify trigger:true for either push event or 
-  # pull request event. Specifying both will only execute push event.
-  # Leaving them both false means this will never run
-  push:
-    trigger: true
+
