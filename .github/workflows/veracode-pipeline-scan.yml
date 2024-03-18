@@ -1,0 +1,102 @@
+name: Veracode Static Pipeline Scanner
+
+on:
+  workflow_call:
+    inputs:
+      policy_name:
+        required: true
+        type: string
+      owner:
+        required: true
+        type: string
+      repo:
+        required: true
+        type: string
+      sha:
+        required: true
+        type: string
+      token:
+        required: true
+        type: string
+      ref:
+        required: true
+        type: string
+      create_code_scanning_alert:
+        required: true
+        type: boolean
+      create_issue:
+        required: true
+        type: boolean
+
+  
+jobs:
+  pipeline_scan:
+    runs-on: ubuntu-latest
+    name: pipeline scan
+
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+      
+      # get the compiled binary from a previous job
+      - name: get archive
+        uses: actions/download-artifact@v3
+        with:
+          name: veracode-artifact
+          path: ./veracode_artifact_directory
+      
+      - name: Get the name of the downloaded files
+        run: |
+          artifact_file=$(ls -1 ./veracode_artifact_directory | head -n 1)
+          echo "veracode_artifact=$artifact_file" >> $GITHUB_ENV
+
+      # run the pipeline scan action
+      - name: Veracode Pipeline-Scan
+        id: pipeline-scan
+        uses: veracode/Veracode-pipeline-scan-action@v1.0.10
+        with:
+          vid: ${{ secrets.VERACODE_API_ID }}
+          vkey: ${{ secrets.VERACODE_API_KEY }}
+          veracode_policy_name: ${{ inputs.policy_name }}
+          file: ./veracode_artifact_directory/${{ env.veracode_artifact }}
+          fail_build: true
+  results_to_security_tab:
+    needs: pipeline_scan
+    runs-on: ubuntu-latest
+    if: ${{ failure() && inputs.create_code_scanning_alert }}
+    name: Send report to Security tab
+    steps:
+      - name: Get scan results
+        uses: actions/download-artifact@v3
+        with:
+          name: "Veracode Pipeline-Scan Results"
+      - name: Convert pipeline scan output to SARIF format
+        id: convert
+        uses: Veracode/veracode-pipeline-scan-results-to-sarif@v2.0.0
+        with:
+          pipeline-results-json: filtered_results.json
+          output-results-sarif: veracode-results.sarif
+          repo_owner: ${{ inputs.owner }}
+          repo_name: ${{ inputs.repo }}
+          commitSHA: ${{ inputs.sha }}
+          ref: ${{ inputs.ref }}
+          githubToken: ${{ inputs.token }}
+
+# This step will import the flaws from the step above
+  create-issues:
+    needs: pipeline_scan
+    if: ${{ inputs.create_issue && failure()}}
+    runs-on: ubuntu-latest
+    name: Send report to issue tab
+    steps:
+      - name: Get scan results
+        uses: actions/download-artifact@v3
+        with:
+          name: 'Veracode Pipeline-Scan Results'
+      - name: Create flaws as issues
+        uses: veracode/veracode-flaws-to-issues@v2.2.22
+        with:
+          scan-results-json: 'filtered_results.json'
+          repo_owner: ${{ inputs.owner }}
+          repo_name: ${{ inputs.repo }}
+          github-token: ${{ inputs.token }}
