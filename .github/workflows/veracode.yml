@@ -1,0 +1,38 @@
+name: Veracode SAST Scan
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  veracode-scan:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Java (Required by the Veracode wrapper under the hood)
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      # Step 3: Zip the source files (Excluding node_modules as required by Veracode)
+      - name: Package Application for Veracode
+        run: |
+          zip -r veracode-package.zip . -x "node_modules/*" ".git/*" ".github/*"
+
+      # Step 4: Upload and Scan to Veracode
+      - name: Veracode Upload and Scan
+        uses: veracode/uploadandscan-action@v1.0.3
+        with:
+          vid: ${{ secrets.VERACODE_API_ID }}
+          vkey: ${{ secrets.VERACODE_API_KEY }}
+          appname: ${{ github.event.repository.name }}
+          createprofile: true
+          filepath: 'veracode-package.zip'
+          version: 'Scan-${{ github.run_id }}-${{ github.run_number }}'
