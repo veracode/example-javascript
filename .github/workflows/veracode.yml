@@ -2,9 +2,9 @@ name: Veracode SAST Scan
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "sde-1111" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "sde-1111" ]
 
 jobs:
   veracode-scan:
